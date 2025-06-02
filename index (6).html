@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Recipe Blog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff8f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ff6f61;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    form {
+      margin-bottom: 30px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .recipe {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .recipe h3 {
+      margin: 0 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Favorite Recipes</h1>
+  </header>
+  <main>
+    <form id="recipeForm">
+      <h2>Share a New Recipe</h2>
+      <input type="text" id="title" placeholder="Recipe Title" required>
+      <textarea id="ingredients" placeholder="Ingredients" rows="4" required></textarea>
+      <textarea id="instructions" placeholder="Instructions" rows="4" required></textarea>
+      <button type="submit">Post Recipe</button>
+    </form>
+
+    <div id="recipesContainer"></div>
+  </main>
+
+  <script>
+    document.getElementById('recipeForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById('title').value;
+      const ingredients = document.getElementById('ingredients').value;
+      const instructions = document.getElementById('instructions').value;
+
+      const recipeContainer = document.createElement('div');
+      recipeContainer.classList.add('recipe');
+
+      recipeContainer.innerHTML = `
+        <h3>${title}</h3>
+        <p><strong>Ingredients:</strong><br>${ingredients.replace(/\n/g, '<br>')}</p>
+        <p><strong>Instructions:</strong><br>${instructions.replace(/\n/g, '<br>')}</p>
+      `;
+
+      document.getElementById('recipesContainer').prepend(recipeContainer);
+
+      document.getElementById('recipeForm').reset();
+    });
+  </script>
+</body>
+</html>

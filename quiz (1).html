@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Quiz Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #eee;
+      cursor: pointer;
+    }
+    .answers button.correct {
+      background-color: #c8e6c9;
+    }
+    .answers button.wrong {
+      background-color: #ffcdd2;
+    }
+    #next-btn {
+      display: none;
+      margin-top: 20px;
+    }
+    .topic-selection {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .topic-selection select {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h1>Online Quiz Platform</h1>
+  <div class="topic-selection">
+    <label for="topic">Select a topic:</label>
+    <select id="topic">
+      <option value="math">Math</option>
+      <option value="science">Science</option>
+      <option value="history">History</option>
+    </select>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div id="quiz" style="display:none;">
+    <h2 id="question-text"></h2>
+    <div class="answers" id="answer-buttons"></div>
+    <button id="next-btn" onclick="nextQuestion()">Next</button>
+    <div id="score" style="margin-top:20px;"></div>
+  </div>
+</div>
+
+<script>
+  const quizData = {
+    math: [
+      {
+        question: "What is 5 + 7?",
+        answers: ["10", "12", "13", "14"],
+        correct: "12"
+      },
+      {
+        question: "What is the square root of 81?",
+        answers: ["7", "8", "9", "10"],
+        correct: "9"
+      }
+    ],
+    science: [
+      {
+        question: "What planet is known as the Red Planet?",
+        answers: ["Earth", "Venus", "Mars", "Jupiter"],
+        correct: "Mars"
+      },
+      {
+        question: "Water boils at what temperature (Celsius)?",
+        answers: ["90", "95", "100", "105"],
+        correct: "100"
+      }
+    ],
+    history: [
+      {
+        question: "Who was the first President of the United States?",
+        answers: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"],
+        correct: "George Washington"
+      },
+      {
+        question: "In what year did World War II end?",
+        answers: ["1944", "1945", "1946", "1947"],
+        correct: "1945"
+      }
+    ]
+  };
+
+  let currentTopic = "";
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let currentQuestions = [];
+
+  function startQuiz() {
+    currentTopic = document.getElementById("topic").value;
+    currentQuestions = quizData[currentTopic];
+    currentQuestionIndex = 0;
+    score = 0;
+    document.querySelector(".topic-selection").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+    showQuestion();
+  }
+
+  function showQuestion() {
+    const questionData = currentQuestions[currentQuestionIndex];
+    const questionText = document.getElementById("question-text");
+    const answerButtons = document.getElementById("answer-buttons");
+
+    questionText.textContent = questionData.question;
+    answerButtons.innerHTML = "";
+
+    questionData.answers.forEach(answer => {
+      const button = document.createElement("button");
+      button.textContent = answer;
+      button.onclick = () => selectAnswer(button, questionData.correct);
+      answerButtons.appendChild(button);
+    });
+
+    document.getElementById("next-btn").style.display = "none";
+    document.getElementById("score").textContent = Score: ${score}/${currentQuestions.length};
+  }
+
+  function selectAnswer(button, correctAnswer) {
+    const allButtons = document.querySelectorAll("#answer-buttons button");
+    allButtons.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correctAnswer) {
+        btn.classList.add("correct");
+      } else {
+        btn.classList.add("wrong");
+      }
+    });
+
+    if (button.textContent === correctAnswer) {
+      score++;
+    }
+
+    document.getElementById("next-btn").style.display = "block";
+    document.getElementById("score").textContent = Score: ${score}/${currentQuestions.length};
+  }
+
+  function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < currentQuestions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    document.getElementById("quiz").innerHTML = `
+      <h2>Quiz Completed!</h2>
+      <p>Your final score is: ${score} / ${currentQuestions.length}</p>
+      <button onclick="location.reload()">Take Another Quiz</button>
+    `;
+  }
+</script>
+
+</body>
+</html>
